@@ -23,10 +23,10 @@
                       :timestamp-config="timestampConfig"
                       :link-options="linkOptions"
                       :accept-image-types="'.png, .jpeg'"
-                      @onImageClicked="onImageClicked"
-                      @onImageSelected="onImageSelected"
-                      @onMessageSubmit="onMessageSubmit"
-                      @onType="onType"
+                      @onimageclicked="onImageClicked"
+                      @onimageselected="onImageSelected"
+                      @onmessagesubmit="onMessageSubmit"
+                      @ontype="onType"
                       @onClose="onClose('param value')"/>
             </div>
             <div class="external-controller">

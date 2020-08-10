@@ -1,4 +1,4 @@
-# vue-quick-chat
+# vue-fast-chat
 This vue component is a simple chat that can be easily imported and used in your project.
 
 ## Features
@@ -10,21 +10,21 @@ This vue component is a simple chat that can be easily imported and used in your
 - Support for profile pictures (released at version 1.1.1)
 - Uses Luxon in place of moment. Added event functions (released at version 1.2.0)
 - Support for timestamp config (released at version 1.2.1)
-<img src="./src/assets/vue-quick-chat.png" width="100%"/>
+<img src="./src/assets/vue-fast-chat.png" width="100%"/>
 
 ## Instalation
 ```
-yarn add vue-quick-chat
+yarn add vue-fast-chat
 ```
 or with npm
 ```
-npm install vue-quick-chat --save
+npm install vue-fast-chat --save
 ```
 
 ## Usage
 ```javascript
-import { Chat } from 'vue-quick-chat'
-import 'vue-quick-chat/dist/vue-quick-chat.css';
+import { Chat } from 'vue-fast-chat'
+import 'vue-fast-chat/dist/vue-fast-chat.css';
 
 
 export default {
@@ -103,8 +103,8 @@ You can also use a slot to define the header content
 ```
 Bellow we have an example of the component data structure
 ```javascript
-import {Chat} from 'vue-quick-chat';
-import 'vue-quick-chat/dist/vue-quick-chat.css';
+import {Chat} from 'vue-fast-chat';
+import 'vue-fast-chat/dist/vue-fast-chat.css';
 
 export default {
     components: {
