@@ -12,15 +12,15 @@
                         :scroll-bottom="scrollBottom"
                         :profile-picture-config="profilePictureConfig"
                         :timestamp-config="timestampConfig"
-                        @onImageClicked="onImageClicked"/>
+                        @onimagelicked="onImageClicked"/>
         <MessageManager :colors="colors"
                         :border-style="borderStyle" :submit-icon-size="submitIconSize"
                         :submit-image-icon-size="submitImageIconSize"
                         :send-images="sendImages"
                         :accept-image-types="acceptImageTypes"
-                        @onImageSelected="onImageSelected"
-                        @onMessageSubmit="onMessageSubmit"
-                        @onType="onType"/>
+                        @onimageselected="onImageSelected"
+                        @onmessagesubmit="onMessageSubmit"
+                        @ontype="onType"/>
     </div>
 </template>
 
@@ -204,19 +204,19 @@
                 'setChatTitle'
             ]),
             onClose: function(){
-                this.$emit("onClose");
+                this.$emit("onclose");
             },
             onType: function(e){
-                this.$emit("onType", e)
+                this.$emit("ontype", e)
             },
             onMessageSubmit: function(message){
-                this.$emit("onMessageSubmit", message)
+                this.$emit("onmessagesubmit", message)
             },
             onImageSelected: function(data){
-                this.$emit("onImageSelected", data)
+                this.$emit("onimageselected", data)
             },
             onImageClicked: function(message){
-                this.$emit("onImageClicked", message)
+                this.$emit("onimageclicked", message)
             },
         },
     }

@@ -249,6 +249,7 @@
                 }, 1000);
             },
             onMessageSubmit(message) {
+                console.log('message submited', message);
                 /*
                 * example simulating an upload callback.
                 * It's important to notice that even when your message wasn't send
