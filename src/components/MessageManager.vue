@@ -99,13 +99,12 @@
                         viewed: false,
                         type: 'text'
                     };
-                    this.$emit("onMessageSubmit", message);
-                    //this.onMessageSubmit(message);
+                    this.$emit("onmessagesubmit", message);
                     this.newMessage(message)
                 }
             },
             handleType: function (e) {
-                this.$emit("onType", e);
+                this.$emit("ontype", e);
             },
             pickImage: function(){
                 this.$refs.inputImage.click()
@@ -122,7 +121,7 @@
                     uploaded: false,
                     viewed: false
                 };
-                this.$emit("onImageSelected", {file: files[0], message});
+                this.$emit("onimageselected", {file: files[0], message});
                 //this.onImageSelected(files, message)
                 this.newMessage(message)
             }
