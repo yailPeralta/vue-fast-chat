@@ -1,7 +1,8 @@
 {
-  "name": "vue-quick-chat",
+  "name": "vue-quicker-chat",
   "version": "1.2.5",
   "private": false,
+  "description": "A fork from https://github.com/MatheusrdSantos/vue-quick-chat",
   "main": "./dist/vue-quick-chat.common.js",
   "files": [
     "dist/*",
@@ -10,7 +11,7 @@
     "*.json",
     "*.js"
   ],
-  "author": "Matheus Santos <matheus.r.d.s10@hotmail.com>",
+  "author": "Yail Peralta <yaildeveloper@gmail.com",
   "license": "MIT",
   "keywords": [
     "vue",
@@ -19,7 +20,7 @@
     "vuejs",
     "simple-chat"
   ],
-  "repository": "https://github.com/MatheusrdSantos/vue-quick-chat",
+  "repository": "https://github.com/yailperalta-santex/vue-quick-chat",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
