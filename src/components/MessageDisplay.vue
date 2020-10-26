@@ -6,17 +6,23 @@
         </div>
         <div v-for="(message, index) in messages" :key="index" class="message-container">
             <MyMessage v-if="message.myself" :message="message" :async-mode="asyncMode"
-                       :colors="colors"
-                       :link-options="linkOptions.myself"
-                       :profile-picture-config="profilePictureConfig"
-                       :timestamp-config="timestampConfig"
-                       @onImageClicked="onImageClicked"/>
+                        :colors="colors"
+                        :link-options="linkOptions.myself"
+                        :profile-picture-config="profilePictureConfig"
+                        :timestamp-config="timestampConfig"
+                        :gmaps-api-key="gmapsApiKey"
+                        @onimageclicked="onImageClicked"
+                        @onfileclicked="onFileClicked"
+                        @onmapclicked="onMapClicked"/>
             <OtherMessage v-else :message="message" :async-mode="asyncMode" 
-                          :colors="colors"
-                          :link-options="linkOptions.others"
-                          :profile-picture-config="profilePictureConfig"
-                          :timestamp-config="timestampConfig"
-                          @onImageClicked="onImageClicked"/>
+                        :colors="colors"
+                        :link-options="linkOptions.others"
+                        :profile-picture-config="profilePictureConfig"
+                        :timestamp-config="timestampConfig"
+                        :gmaps-api-key="gmapsApiKey"
+                        @onimageclicked="onImageClicked"
+                        @onfileclicked="onFileClicked"
+                        @onmapclicked="onMapClicked"/>
         </div>
     </div>
 </template>
@@ -46,11 +52,6 @@
                 required: false,
                 default: null
             },
-            /* onImageClicked: {
-                type: Function,
-                required: false,
-                default: null
-            }, */
             scrollBottom: {
                 type: Object,
                 required: true
@@ -66,7 +67,12 @@
             linkOptions: {
                 type: Object,
                 required: true
-            } 
+            },
+            gmapsApiKey: {
+                type: String,
+                required: false,
+                default: ''
+            }
         },
         data() {
             return {
@@ -151,7 +157,13 @@
                 this.updateScroll = false;
             },
             onImageClicked(message){
-                this.$emit("onImageClicked", message)
+                this.$emit("onimageclicked", message)
+            },
+            onFileClicked: function(message){
+                this.$emit("onfileclicked", message)
+            },
+            onMapClicked: function(message){
+                this.$emit("onmapclicked", message)
             }
         }
     }
