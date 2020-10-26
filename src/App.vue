@@ -18,16 +18,22 @@
                       :async-mode="asyncMode"
                       :scroll-bottom="scrollBottom"
                       :display-header="true"
-                      :send-images="true"
+                      :send-images="false"
+                      :send-attachments="true"
                       :profile-picture-config="profilePictureConfig"
                       :timestamp-config="timestampConfig"
                       :link-options="linkOptions"
                       :accept-image-types="'.png, .jpeg'"
+                      :gmaps-api-key="gmapsApiKey"
                       @onimageclicked="onImageClicked"
                       @onimageselected="onImageSelected"
                       @onmessagesubmit="onMessageSubmit"
                       @ontype="onType"
-                      @onClose="onClose('param value')"/>
+                      @onfileclicked="onFileClicked"
+                      @onmapclicked="onMapClicked"
+                      @onuploadfile="onUploadFile"
+                      @onattachlocation="onAttachLocation"
+                      @onclose="onClose('param value')"/>
             </div>
             <div class="external-controller">
                 <div class="controller-btn-container">
@@ -58,6 +64,7 @@
         data() {
             return {
                 visible: true,
+                gmapsApiKey: '', // Put your api key here
                 participants: [
                     {
                         name: 'Arnaldo',
@@ -149,6 +156,7 @@
                     },
                     submitIcon: '#b91010',
                     submitImageIcon: '#b91010',
+                    attachmentIcon: '#2c3e50'
                 },
                 borderStyle: {
                     topLeft: "10px",
@@ -360,7 +368,7 @@
                 this.chatTitle = 'Change All Participants';
                 this.placeholder = 'اكتب رسالتك هنا';
             },
-            onImageSelected({file, message}){
+            onImageSelected({file, message}) {
                 let src = 'https://149364066.v2.pressablecdn.com/wp-content/uploads/2017/03/vue.jpg'
                 this.messages.push(message);
                 /**
@@ -373,12 +381,24 @@
                     message.src = res.src
                 }, 3000, {src});
             },
-            onImageClicked(message){
+            onImageClicked(message) {
                 /**
                  * This is the callback function that is going to be executed when some image is clicked.
                  * You can add your code here to do whatever you need with the image clicked. A common situation is to display the image clicked in full screen.
                  */
-                console.log('Image clicked', message.src)
+                console.log('Image clicked', message.src);
+            },
+            onFileClicked(message) {
+                console.log('File clicked', message.src);
+            },
+            onMapClicked(message) {
+                console.log('Map clicked', message.src);
+            },
+            onAttachLocation(data) {
+                console.log('Location Attached', JSON.stringify(data));
+            },
+            onUploadFile(data) {
+                console.log('File uploaded', JSON.stringify(data));
             }
         }
     }
