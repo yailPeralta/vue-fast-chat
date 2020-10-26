@@ -15,6 +15,24 @@
                     <div class="img-loading"></div>
                 </div>
             </template>
+            <template v-else-if="message.type == 'location'">
+                <p class="message-username-image">{{myself.name}}</p>
+                <div class="message-image">
+                    <a :href="getMapLink(message.content)" target="_blank">
+                        <img class="message-image-display" :src="getMapThumbnail(message.content)" alt="" @click="onMapClicked(message)">
+                    </a>
+                </div>
+            </template>
+            <template v-else-if="message.type == 'file'">
+                <p class="message-username-image">{{myself.name}}</p>
+                <div v-if="message.uploaded" class="message-image file-wrapper">
+                    <img class="message-image-display file-logo" :src="message.src" alt="" @click="onFileClicked(message)">
+                </div>
+                <div v-else class="message-image file-wrapper">
+                    <img class="message-image-display img-overlay file-logo" :src="message.preview" alt="">
+                    <div class="img-loading"></div>
+                </div>
+            </template>
             <template v-else>
                 <div class="message-text" :style="{background: colors.message.others.bg, color: colors.message.others.text}">
                     <p class="message-username">{{getParticipantById(message.participantId).name}}</p>
@@ -61,11 +79,6 @@
                 type: Object,
                 required: true
             },
-            /* onImageClicked: {
-                type: Function,
-                required: false,
-                default: null
-            }, */
             profilePictureConfig: {
                 type: Object,
                 required: true
@@ -73,6 +86,11 @@
             timestampConfig: {
                 type: Object,
                 required: true
+            },
+            gmapsApiKey: {
+                type: String,
+                required: false,
+                default: ''
             }
         },
         computed: {
@@ -85,6 +103,25 @@
         methods: {
             onImageClicked: function(message){
                 this.$emit("onImageClicked", message)
+            },
+            onFileClicked: function(message){
+                this.$emit("onFileClicked", message);
+            },
+            onMapClicked: function(message){
+                this.$emit("onMapClicked", message)
+            },
+            getMapLink(content) {
+                let cordsObj = JSON.parse(content);
+                return  `https://maps.google.com/?q=${cordsObj.lat},${cordsObj.lng}`;
+            },
+            getMapThumbnail(content) {
+                let cordsObj = JSON.parse(content);
+                console.log('cordsObj', cordsObj);
+                console.log('this.gMapsApiKey', this.gmapsApiKey);
+                return `
+                    https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap%20
+                    &markers=color:red%7Clabel:C%7C${cordsObj.lat},${cordsObj.lng}%20&key=${this.gmapsApiKey}
+                `;
             }
         }
     }
@@ -137,6 +174,14 @@
             white-space: pre-wrap;
             border-bottom-left-radius: 0px;
             word-break: break-word;
+        }
+
+        .file-logo {
+            width: 80px !important;
+        }
+
+        .file-wrapper {
+            padding-right:  !important;
         }
     }
 </style>

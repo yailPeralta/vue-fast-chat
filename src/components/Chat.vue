@@ -1,6 +1,12 @@
 <template>
     <div class="quick-chat-container"
-         :style="{'border-bottom-left-radius': borderStyle.bottomLeft, 'border-bottom-right-radius': borderStyle.bottomRight, 'border-top-right-radius': borderStyle.topRight, 'border-top-left-radius': borderStyle.topLeft}">
+         :style="{
+             'border-bottom-left-radius': borderStyle.bottomLeft, 
+             'border-bottom-right-radius': borderStyle.bottomRight, 
+             'border-top-right-radius': borderStyle.topRight, 
+             'border-top-left-radius': borderStyle.topLeft
+         }
+         ">
         <Header v-if="displayHeader" :colors="colors" :border-style="borderStyle" 
                 :hide-close-button="hideCloseButton" :close-button-icon-size="closeButtonIconSize" @onClose="onClose()">
             <template #header>
@@ -12,12 +18,18 @@
                         :scroll-bottom="scrollBottom"
                         :profile-picture-config="profilePictureConfig"
                         :timestamp-config="timestampConfig"
-                        @onImageClicked="onImageClicked"/>
+                        :gmaps-api-key="gmapsApiKey"
+                        @onImageClicked="onImageClicked"
+                        @onFileClicked="onFileClicked"
+                        @onMapClicked="onMapClicked"/>
         <MessageManager :colors="colors"
                         :border-style="borderStyle" :submit-icon-size="submitIconSize"
                         :submit-image-icon-size="submitImageIconSize"
                         :send-images="sendImages"
+                        :send-attachments="sendAttachments"
                         @onImageSelected="onImageSelected"
+                        @onUploadFile="onUploadFile"
+                        @onAttachLocation="onAttachLocation"
                         @onMessageSubmit="onMessageSubmit"
                         @onType="onType"/>
     </div>
@@ -29,7 +41,7 @@
     import MessageManager from './MessageManager.vue'
     import {mapMutations} from 'vuex'
     import store from '../store'
-
+ 
     export default {
         name: 'chat',
         components: {
@@ -121,31 +133,6 @@
                 required: false,
                 default: true
             },
-            /* onType: {
-                type: Function,
-                required: false,
-                default: () => false
-            }, */
-            /* onMessageSubmit: {
-                type: Function,
-                required: false,
-                default: () => false
-            }, */
-            /* onClose: {
-                type: Function,
-                required: false,
-                default: () => false
-            }, */
-            /* onImageSelected: {
-                type: Function,
-                required: false,
-                default: () => false
-            }, */
-            /* onImageClicked: {
-                type: Function,
-                required: false,
-                default: () => false
-            }, */
             sendImages: {
                 type: Boolean,
                 required: false,
@@ -185,7 +172,17 @@
                         others: {}
                     }
                 }
-            } 
+            },
+            gmapsApiKey: {
+                type: String,
+                required: false,
+                default: ''
+            },
+            sendAttachments: {
+                type: Boolean,
+                required: false,
+                default: false
+            }
         },
         watch: {
             participants() {
@@ -222,21 +219,33 @@
                 'setPlaceholder',
                 'setChatTitle'
             ]),
-            onClose: function(){
+            onClose: function() {
                 this.$emit("onClose");
             },
-            onType: function(e){
+            onType: function(e)  {
                 this.$emit("onType", e)
             },
-            onMessageSubmit: function(message){
+            onMessageSubmit: function(message) {
                 this.$emit("onMessageSubmit", message)
             },
-            onImageSelected: function(data){
+            onImageSelected: function(data) {
                 this.$emit("onImageSelected", data)
             },
-            onImageClicked: function(message){
+            onUploadFile: function(data) {
+                this.$emit("onUploadFile", data)
+            },
+            onAttachLocation: function(data) {
+                this.$emit("onAttachLocation", data)
+            },
+            onImageClicked: function(message) {
                 this.$emit("onImageClicked", message)
             },
+            onFileClicked: function(message) {
+                this.$emit("onFileClicked", message)
+            },
+            onMapClicked: function(message) {
+                this.$emit("onMapClicked", message)
+            }
         },
     }
 </script>

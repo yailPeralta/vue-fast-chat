@@ -1,6 +1,6 @@
 {
-  "name": "vue-quick-chat",
-  "version": "1.2.3",
+  "name": "vue-fast-chat",
+  "version": "1.2.6",
   "private": false,
   "main": "./dist/vue-quick-chat.common.js",
   "files": [
