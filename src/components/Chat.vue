@@ -1,6 +1,12 @@
 <template>
     <div class="quick-chat-container"
-         :style="{'border-bottom-left-radius': borderStyle.bottomLeft, 'border-bottom-right-radius': borderStyle.bottomRight, 'border-top-right-radius': borderStyle.topRight, 'border-top-left-radius': borderStyle.topLeft}">
+         :style="{
+             'border-bottom-left-radius': borderStyle.bottomLeft, 
+             'border-bottom-right-radius': borderStyle.bottomRight, 
+             'border-top-right-radius': borderStyle.topRight, 
+             'border-top-left-radius': borderStyle.topLeft
+         }
+         ">
         <Header v-if="displayHeader" :colors="colors" :border-style="borderStyle" 
                 :hide-close-button="hideCloseButton" :close-button-icon-size="closeButtonIconSize" @onClose="onClose()">
             <template #header>
@@ -12,13 +18,19 @@
                         :scroll-bottom="scrollBottom"
                         :profile-picture-config="profilePictureConfig"
                         :timestamp-config="timestampConfig"
-                        @onimagelicked="onImageClicked"/>
+                        :gmaps-api-key="gmapsApiKey"
+                        @onimagelicked="onImageClicked"
+                        @onfileclicked="onFileClicked"
+                        @onmapclicked="onMapClicked"/>
         <MessageManager :colors="colors"
                         :border-style="borderStyle" :submit-icon-size="submitIconSize"
                         :submit-image-icon-size="submitImageIconSize"
                         :send-images="sendImages"
                         :accept-image-types="acceptImageTypes"
+                        :send-attachments="sendAttachments"
                         @onimageselected="onImageSelected"
+                        @onuploadfile="onUploadFile"
+                        @onattachlocation="onAttachLocation"
                         @onmessagesubmit="onMessageSubmit"
                         @ontype="onType"/>
     </div>
@@ -30,7 +42,7 @@
     import MessageManager from './MessageManager.vue'
     import {mapMutations} from 'vuex'
     import store from '../store'
-
+ 
     export default {
         name: 'chat',
         components: {
@@ -166,6 +178,16 @@
                 type: String,
                 required: false,
                 default: "image/*"
+            },
+            gmapsApiKey: {
+                type: String,
+                required: false,
+                default: ''
+            },
+            sendAttachments: {
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         watch: {
@@ -218,6 +240,18 @@
             onImageClicked: function(message){
                 this.$emit("onimageclicked", message)
             },
+            onUploadFile: function(data) {
+                this.$emit("onuploadfile", data)
+            },
+            onAttachLocation: function(data) {
+                this.$emit("onattachlocation", data)
+            },
+            onFileClicked: function(message) {
+                this.$emit("onfileclicked", message)
+            },
+            onMapClicked: function(message) {
+                this.$emit("onmapclicked", message)
+            }
         },
     }
 </script>
