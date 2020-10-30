@@ -5,24 +5,28 @@
             <div class="message-loading"></div>
         </div>
         <div v-for="(message, index) in messages" :key="index" class="message-container">
-            <MyMessage v-if="message.myself" :message="message" :async-mode="asyncMode"
-                       :colors="colors"
-                       :link-options="linkOptions.myself"
-                       :profile-picture-config="profilePictureConfig"
-                       :timestamp-config="timestampConfig"
-                       :gmaps-api-key="gmapsApiKey"
-                       @onimageclicked="onImageClicked"
-                       @onfileclicked="onFileClicked"
-                       @onmapclicked="onMapClicked"/>
-            <OtherMessage v-else :message="message" :async-mode="asyncMode" 
-                          :colors="colors"
-                          :link-options="linkOptions.others"
-                          :profile-picture-config="profilePictureConfig"
-                          :timestamp-config="timestampConfig"
-                          :gmaps-api-key="gmapsApiKey"
-                          @onimageclicked="onImageClicked"
-                          @onfileclicked="onFileClicked"
-                          @onmapclicked="onMapClicked"/>
+            <div :ref="'message_' + index">
+                <MyMessage v-if="message.myself" :message="message" :async-mode="asyncMode"
+                    :colors="colors"
+                    :link-options="linkOptions.myself"
+                    :profile-picture-config="profilePictureConfig"
+                    :timestamp-config="timestampConfig"
+                    :gmaps-api-key="gmapsApiKey"
+                    :search="search"
+                    @onimageclicked="onImageClicked"
+                    @onfileclicked="onFileClicked"
+                    @onmapclicked="onMapClicked"/>
+                <OtherMessage v-else :message="message" :async-mode="asyncMode" 
+                    :colors="colors"
+                    :link-options="linkOptions.others"
+                    :profile-picture-config="profilePictureConfig"
+                    :timestamp-config="timestampConfig"
+                    :gmaps-api-key="gmapsApiKey"
+                    :search="search"
+                    @onimageclicked="onImageClicked"
+                    @onfileclicked="onFileClicked"
+                    @onmapclicked="onMapClicked"/>
+            </div>
         </div>
     </div>
 </template>
@@ -72,6 +76,11 @@
                 type: String,
                 required: false,
                 default: ''
+            },
+            search: {
+                type: String,
+                required: false,
+                default: ''
             }
         },
         data() {
@@ -87,6 +96,22 @@
                 'messages',
                 'myself'
             ]),
+            firstOcurrence: function() {
+                return this.messages.findIndex(message => !!message.search_match);
+            }
+        },
+        watch: {
+            search: function(value) {
+                if (!!value) {
+                    let firstOccurrence = this.messages.findIndex(message => !!message.search_match);
+
+                    if (firstOccurrence !== -1) {
+                        this.scrollToMessage(firstOccurrence);
+                    }
+                } else {
+                    this.goToBottom();
+                }
+            }
         },
         mounted() {
             this.goToBottom();
@@ -155,6 +180,14 @@
                 scrollDiv.scrollTop = scrollDiv.scrollHeight;
 
                 this.updateScroll = false;
+            },
+            scrollToMessage(index) {
+                let scrollDiv = this.$refs.containerMessageDisplay;
+                let message = this.$refs['message_' + index];
+        
+                scrollDiv.scrollTop = (message[0].offsetTop - scrollDiv.scrollTop);
+
+                this.updateScroll = true;
             },
             onImageClicked(message){
                 this.$emit("onimageclicked", message)

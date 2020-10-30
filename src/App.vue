@@ -25,6 +25,8 @@
                       :link-options="linkOptions"
                       :accept-image-types="'.png, .jpeg'"
                       :gmaps-api-key="gmapsApiKey"
+                      :search-messages="true"
+                      @onsearch="onSearch"
                       @onimageclicked="onImageClicked"
                       @onimageselected="onImageSelected"
                       @onmessagesubmit="onMessageSubmit"
@@ -86,6 +88,7 @@
                     {
                         content: "Really?! I don't care! Haha",
                         participantId: 1,
+                        search_match: 0,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true,
@@ -94,6 +97,7 @@
                     {
                         content: "Really?! I don't care! Haha",
                         participantId: 1,
+                        search_match: 0,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true,
@@ -102,30 +106,34 @@
                     {
                         content: "Really?! I don't care! Haha",
                         participantId: 1,
+                        search_match: 0,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true,
                         type: 'text'
                     },
                     {
-                        content: "Hey, Jhon Doe! How are you today",
+                        content: "Hey, Jhon Doe!  with",
                         participantId: 1,
+                        search_match: 0,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true,
                         type: 'text'
                     },
                     {
-                        content: "Hey, Adam! I'm felling really fine this evening.",
+                        content: "Hey, Adam! I'm felling really fine this evening. match",
                         participantId: 3,
+                        search_match: 1,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true,
                         type: 'text'
                     },
                     {
-                        content: "Really?! I don't care! Haha www.google.com",
+                        content: "Really?! message with match",
                         participantId: 1,
+                        search_match: 1,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true,
@@ -171,8 +179,9 @@
                 asyncMode: true,
                 toLoad: [
                     {
-                        content: 'Hey, John Doe! How are you today?',
+                        content: 'Hey, John Doe! How are you today match?',
                         participantId: 2,
+                        search_match: 1,
                         timestamp: { year: 2016, month: 3, day: 5, hour: 10, minute: 10, second: 3, millisecond: 123 },
                         uploaded: true,
                         viewed: true
@@ -180,6 +189,7 @@
                     {
                         content: "Hey, Adam! I'm feeling really fine this evening.",
                         participantId: 3,
+                        search_match: 0,
                         timestamp: { year: 2016, month: 1, day: 5, hour: 19, minute: 10, second: 3, millisecond:123 },
                         uploaded: true,
                         viewed: true
@@ -275,8 +285,10 @@
                 }, 2000)
             },
             onClose(param) {
-                console.log(param)
                 this.visible = false;
+            },
+            onSearch(data) {
+                console.log('On search', data);
             },
             addMessage() {
                 /* this.messages.push(
@@ -328,19 +340,22 @@
                     {
                         content: "Really?! I don't care! Haha",
                         participantId: 5,
+                        search_match: 0,
+                        timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
+                        uploaded: true,
+                        viewed: true
+                    },
+                    {
+                        content: "Really?! I don't care! Haha match",
+                        search_match: 1,
+                        participantId: 3,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
                         viewed: true
                     },
                     {
                         content: "Really?! I don't care! Haha",
-                        participantId: 6,
-                        timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
-                        uploaded: true,
-                        viewed: true
-                    },
-                    {
-                        content: "Really?! I don't care! Haha",
+                        search_match: 0,
                         participantId: 3,
                         timestamp: {year: 2012, month: 3, day: 5, hour: 20, minute: 10, second: 3, millisecond: 123},
                         uploaded: true,
@@ -352,13 +367,15 @@
                     {
                         content: 'Hey, John Doe! How are you today?',
                         participantId: 6,
+                        search_match: 0,
                         timestamp: { year: 2016, month: 3, day: 5, hour: 10, minute: 10, second: 3, millisecond: 123 },
                         uploaded: true,
                         viewed: true
                     },
                     {
-                        content: "Hey, Adam! I'm feeling really fine this evening.",
+                        content: "Hey, Adam! I'm feeling really fine this evening. match",
                         participantId: 3,
+                        search_match: 1,
                         timestamp: { year: 2016, month: 10, day: 5, hour: 19, minute: 10, second: 3, millisecond:123 },
                         uploaded: true,
                         viewed: true
@@ -382,11 +399,7 @@
                 }, 3000, {src});
             },
             onImageClicked(message) {
-                /**
-                 * This is the callback function that is going to be executed when some image is clicked.
-                 * You can add your code here to do whatever you need with the image clicked. A common situation is to display the image clicked in full screen.
-                 */
-                console.log('Image clicked', message.src);
+                console.log('Image clicked', message);
             },
             onFileClicked(message) {
                 console.log('File clicked', message.src);

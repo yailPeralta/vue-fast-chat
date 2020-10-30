@@ -2,17 +2,15 @@
     <div class="myself-message-body">
         <div class="message-content">
             <template v-if="message.type == 'image'">
-                <p class="message-username-image">{{myself.name}}</p>
                 <div v-if="message.uploaded" class="message-image">
                     <img class="message-image-display" :src="message.src" alt="" @click="onImageClicked(message)">
                 </div>
                 <div v-else class="message-image">
-                    <img class="message-image-display img-overlay" :src="message.preview" alt="">
+                    <img class="message-image-display img-overlay" :src="message.preview" alt="" @click="onImageClicked(message)">
                     <div class="img-loading"></div>
                 </div>
             </template>
             <template v-else-if="message.type == 'location'">
-                <p class="message-username-image">{{myself.name}}</p>
                 <div class="message-image">
                     <a :href="getMapLink(message.content)" target="_blank">
                         <img class="message-image-display" :src="getMapThumbnail(message.content)" alt="" @click="onMapClicked(message)">
@@ -20,20 +18,18 @@
                 </div>
             </template>
             <template v-else-if="message.type == 'file'">
-                <p class="message-username-image">{{myself.name}}</p>
                 <div v-if="message.uploaded" class="message-image file-wrapper">
                     <img class="message-image-display file-logo" :src="message.src" alt="" @click="onFileClicked(message)">
                 </div>
                 <div v-else class="message-image file-wrapper">
-                    <img class="message-image-display img-overlay file-logo" :src="message.preview" alt="">
+                    <img class="message-image-display img-overlay file-logo" :src="message.preview" alt="" @click="onFileClicked(message)">
                     <div class="img-loading"></div>
                 </div>
-                <p ref="message-content">{{message.content}}</p>
+                <p ref="message-content" v-html="messageBody"></p>
             </template>
             <template v-else>    
                 <div class="message-text" :style="{background: colors.message.myself.bg, color: colors.message.myself.text}">
-                    <p class="message-username">{{myself.name}}</p>
-                    <p ref="message-content">{{message.content}}</p>
+                    <p ref="message-content" v-html="messageBody"></p>
                 </div>
             </template>
             <div class="message-timestamp" :style="{'justify-content': 'flex-end'}">
@@ -80,11 +76,6 @@
                 type: Object,
                 required: true
             },
-            /* onImageClicked: {
-                type: Function,
-                required: false,
-                default: null
-            }, */
             profilePictureConfig: {
                 type: Object,
                 required: true
@@ -97,6 +88,11 @@
                 type: String,
                 required: false,
                 default: ''
+            },
+            search: {
+                type: String,
+                required: false,
+                default: ''
             }
         },
         computed: {
@@ -105,6 +101,21 @@
                 'messages',
                 'myself'
             ]),
+            messageBody: function() {
+                if (!!this.search && !!this.message.search_match) {
+                    let search = this.search.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+		                .replace(/-/g, '\\x2d');
+
+                    let regex = new RegExp(search, 'gi');
+
+                    return this.message.content.replace(
+                        regex, 
+                        `<span style="background: yellow !important; color: dimgray;">${this.search}</span>`
+                    );
+                }
+
+                return this.message.content; 
+            }
         },
         methods: {
             onImageClicked: function(message){

@@ -1,6 +1,6 @@
 <template> 
     <div class="container-message-manager">
-        <div v-if="sendAttachments" class="icon-send-message" @click="openAttachmentOptions">
+        <div v-if="sendAttachments" class="icon-send-message attachments-button" title="Adjuntar" @click="openAttachmentOptions">
             <PaperclipIcon :size="attachmentsIconSize" :fill-color="colors.attachmentIcon"/>
         </div>
         <div class="message-text-box">
@@ -28,7 +28,7 @@
 
 <script>
     //import 'vue-material-design-icons/styles.css';
-    import {mapMutations} from 'vuex'
+    import { mapMutations } from 'vuex'
     import { DateTime } from "luxon";
     import SendIcon from 'vue-material-design-icons/Send';
     import ImageIcon from 'vue-material-design-icons/Image';
@@ -352,13 +352,21 @@
             cursor: pointer;
             opacity: 0.7;
             transition: 0.3s;
-            border-radius: 11px;
             padding: 8px;
+            cursor: pointer;
+            border-radius: 11px !important;
+            min-width: 20px;
+            margin: 0;
+            text-align: center;
         }
 
         .icon-send-message:hover {
             opacity: 1;
             background: #eee;
+        }
+
+        .attachments-button {
+            padding-left: 0 !important;
         }
     }
 </style>
