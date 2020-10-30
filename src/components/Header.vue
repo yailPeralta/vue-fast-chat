@@ -1,5 +1,10 @@
 <template>
     <div class="header-container" :style="{background: colors.header.bg}">
+        <slot v-if="searchMessages" name="menu-button">
+            <a class="header-exit-button" href="#" @click="toggleSearchInput()">
+                <CommentSearchIcon :size="20" title="Buscar" fill-color="#ffffff"/>
+            </a>
+        </slot>
         <slot name="header" :colors="colors" :chatTitle="chatTitle"
               :participants="participants"
               :myself="myself"></slot>
@@ -21,11 +26,20 @@
 </template>
 
 <script>
+    import CommentSearchIcon from 'vue-material-design-icons/CommentSearch';
     /*
     * TODO: improve support for more than 10 participants (the names list may break in some cases)
     */
     export default {
+        components:{
+            CommentSearchIcon
+        },
         props: {
+            searchMessages: {
+                type: Boolean,
+                required: false,
+                default: true
+            },
             colors: {
                 type: Object,
                 required: true
@@ -58,6 +72,11 @@
                 default: () => false
             } */
         },
+        data() {
+            return {
+                showSearchInput: false
+            };
+        },
         computed: {
             participants() {
                 return this.$store.state.participants;
@@ -75,6 +94,10 @@
         methods:{
             onClose: function(){
                 this.$emit("onClose")
+            },
+            toggleSearchInput: function() {
+                this.showSearchInput = !this.showSearchInput;
+                this.$emit("ontogglesearchintput", this.showSearchInput)
             }
         }
     }

@@ -7,19 +7,29 @@
              'border-top-left-radius': borderStyle.topLeft
          }
          ">
-        <Header v-if="displayHeader" :colors="colors" :border-style="borderStyle" 
-                :hide-close-button="hideCloseButton" :close-button-icon-size="closeButtonIconSize" @onClose="onClose()">
+        <Header v-if="displayHeader"
+                :colors="colors" 
+                :border-style="borderStyle" 
+                :hide-close-button="hideCloseButton" 
+                :close-button-icon-size="closeButtonIconSize" 
+                :search-messages="searchMessages"
+                @ontogglesearchintput="onToggleSearchInput($event)" 
+                @onClose="onClose()">
             <template #header>
                 <slot name="header"></slot>
             </template>
         </Header>
+        <div v-if="showSearchInput" class="input-search-container">
+            <input type="text" class="input-search" placeholder="Buscar" v-model="search">
+        </div>
         <MessageDisplay :colors="colors" :async-mode="asyncMode" :load-more-messages="loadMoreMessages"
                         :link-options="linkOptions"
                         :scroll-bottom="scrollBottom"
                         :profile-picture-config="profilePictureConfig"
                         :timestamp-config="timestampConfig"
                         :gmaps-api-key="gmapsApiKey"
-                        @onimagelicked="onImageClicked"
+                        :search="search"
+                        @onimageclicked="onImageClicked"
                         @onfileclicked="onFileClicked"
                         @onmapclicked="onMapClicked"/>
         <MessageManager :colors="colors"
@@ -40,7 +50,7 @@
     import Header from './Header.vue'
     import MessageDisplay from './MessageDisplay.vue'
     import MessageManager from './MessageManager.vue'
-    import {mapMutations} from 'vuex'
+    import { mapMutations } from 'vuex'
     import store from '../store'
  
     export default {
@@ -139,6 +149,11 @@
                 required: false,
                 default: true
             },
+            searchMessages: {
+                type: Boolean,
+                required: false,
+                default: true
+            },
             profilePictureConfig: {
                 type: Object,
                 required: false,
@@ -190,6 +205,12 @@
                 default: false
             }
         },
+        data() {
+            return {
+                showSearchInput: false,
+                search: ''
+            };
+        },
         watch: {
             participants() {
                 this.setParticipants(this.participants);
@@ -205,6 +226,9 @@
             },
             chatTitle() {
                 this.setChatTitle(this.chatTitle);
+            },
+            search(value) { 
+                this.$emit("onsearch", value);
             }
         },
         beforeCreate() {
@@ -238,19 +262,26 @@
                 this.$emit("onimageselected", data)
             },
             onImageClicked: function(message){
-                this.$emit("onimageclicked", message)
+                this.$emit("onimageclicked", message);
             },
             onUploadFile: function(data) {
-                this.$emit("onuploadfile", data)
+                this.$emit("onuploadfile", data);
             },
             onAttachLocation: function(data) {
-                this.$emit("onattachlocation", data)
+                this.$emit("onattachlocation", data);
             },
             onFileClicked: function(message) {
-                this.$emit("onfileclicked", message)
+                this.$emit("onfileclicked", message);
             },
             onMapClicked: function(message) {
-                this.$emit("onmapclicked", message)
+                this.$emit("onmapclicked", message);
+            },
+            onToggleSearchInput: function(data) {
+                this.showSearchInput = data;
+                if (!this.showSearchInput) {
+                    this.search = '';
+                }
+                this.$emit("ontogglesearchintput", data);
             }
         },
     }
@@ -265,5 +296,30 @@
         flex-direction: column;
         align-items: stretch;
         overflow: hidden;
+    }
+    .input-search-container {
+        padding: 20px;
+    }
+    .input-search {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        color: #565867;
+        text-align: left;
+        cursor: text;
+    }
+
+    input {
+        border-radius: 3px;
+        border: none;
+        padding: 14px;
+        color: white;
+        background: #dcdbdb;
+        width: 90%;
+        font-size: 14px;
+    }
+    
+    .fa-search {
+        position: relative;
+        left: -25px;
     }
 </style>

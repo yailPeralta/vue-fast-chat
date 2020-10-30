@@ -32,11 +32,12 @@
                     <img class="message-image-display img-overlay file-logo" :src="message.preview" alt="">
                     <div class="img-loading"></div>
                 </div>
+                <p ref="message-content" v-html="messageBody"></p>
             </template>
             <template v-else>
                 <div class="message-text" :style="{background: colors.message.others.bg, color: colors.message.others.text}">
                     <p class="message-username">{{getParticipantById(message.participantId).name}}</p>
-                    <p ref="message-content">{{message.content}}</p>
+                    <p ref="message-content" v-html="messageBody"></p>
                 </div>
             </template>
             <div class="message-timestamp" :style="{'justify-content': 'baseline'}">
@@ -91,6 +92,11 @@
                 type: String,
                 required: false,
                 default: ''
+            },
+            search: {
+                type: String,
+                required: false,
+                default: ''
             }
         },
         computed: {
@@ -99,6 +105,21 @@
                 'messages',
                 'myself'
             ]),
+            messageBody: function() {
+                if (!!this.search && !!this.message.search_match) {
+                    let search = this.search.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+		                .replace(/-/g, '\\x2d');
+                        
+                    let regex = new RegExp(search, 'gi');
+
+                    return this.message.content.replace(
+                        regex, 
+                        `<span style="background: yellow !important; color: dimgray;">${this.search}</span>`
+                    );
+                }
+
+                return this.message.content; 
+            }
         },
         methods: {
             onImageClicked: function(message){
@@ -116,8 +137,7 @@
             },
             getMapThumbnail(content) {
                 let cordsObj = JSON.parse(content);
-                console.log('cordsObj', cordsObj);
-                console.log('this.gMapsApiKey', this.gmapsApiKey);
+                
                 return `
                     https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&maptype=roadmap%20
                     &markers=color:red%7Clabel:C%7C${cordsObj.lat},${cordsObj.lng}%20&key=${this.gmapsApiKey}
