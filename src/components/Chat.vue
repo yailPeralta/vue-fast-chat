@@ -20,7 +20,7 @@
             </template>
         </Header>
         <div v-if="showSearchInput" class="input-search-container">
-            <input type="text" class="input-search" placeholder="Buscar" v-model="search">
+            <input v-model="search" type="text" class="input-search" placeholder="Buscar">
         </div>
         <MessageDisplay :colors="colors" :async-mode="asyncMode" :load-more-messages="loadMoreMessages"
                         :link-options="linkOptions"

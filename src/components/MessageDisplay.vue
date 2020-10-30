@@ -7,25 +7,25 @@
         <div v-for="(message, index) in messages" :key="index" class="message-container">
             <div :ref="'message_' + index">
                 <MyMessage v-if="message.myself" :message="message" :async-mode="asyncMode"
-                    :colors="colors"
-                    :link-options="linkOptions.myself"
-                    :profile-picture-config="profilePictureConfig"
-                    :timestamp-config="timestampConfig"
-                    :gmaps-api-key="gmapsApiKey"
-                    :search="search"
-                    @onimageclicked="onImageClicked"
-                    @onfileclicked="onFileClicked"
-                    @onmapclicked="onMapClicked"/>
+                           :colors="colors"
+                           :link-options="linkOptions.myself"
+                           :profile-picture-config="profilePictureConfig"
+                           :timestamp-config="timestampConfig"
+                           :gmaps-api-key="gmapsApiKey"
+                           :search="search"
+                           @onimageclicked="onImageClicked"
+                           @onfileclicked="onFileClicked"
+                           @onmapclicked="onMapClicked"/>
                 <OtherMessage v-else :message="message" :async-mode="asyncMode" 
-                    :colors="colors"
-                    :link-options="linkOptions.others"
-                    :profile-picture-config="profilePictureConfig"
-                    :timestamp-config="timestampConfig"
-                    :gmaps-api-key="gmapsApiKey"
-                    :search="search"
-                    @onimageclicked="onImageClicked"
-                    @onfileclicked="onFileClicked"
-                    @onmapclicked="onMapClicked"/>
+                              :colors="colors"
+                              :link-options="linkOptions.others"
+                              :profile-picture-config="profilePictureConfig"
+                              :timestamp-config="timestampConfig"
+                              :gmaps-api-key="gmapsApiKey"
+                              :search="search"
+                              @onimageclicked="onImageClicked"
+                              @onfileclicked="onFileClicked"
+                              @onmapclicked="onMapClicked"/>
             </div>
         </div>
     </div>
