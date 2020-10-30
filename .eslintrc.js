@@ -47,5 +47,8 @@ module.exports = {
             "svg": "always",
             "math": "always"
         }],
+        "vue/no-v-html": ["warning", {
+            "ignores": ["v-html"]
+        }]
     }
 };
